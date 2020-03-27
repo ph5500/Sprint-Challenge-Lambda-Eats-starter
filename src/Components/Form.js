@@ -19,7 +19,7 @@ const Schema = yup.object().shape({
 const Form = () => {
     // console.log(props);
     //set state up here
-    const [button, setButton] = useState(true);
+    // const [button, setButton] = useState(true);
 
     const [formState, setFormState] = useState({
         name: '',
@@ -36,29 +36,36 @@ const Form = () => {
         instructions: '',
     })
 
+
+    const [buttonDisabled, setButton] = useState(true);
+
+
+
+
     //post state below
-    const [post, setPost] = useState([])
+    const [post, setPost] = useState()
     useEffect(() => {
-        Schema.isValid(Schema).then(valid => {
+        Schema.isValid(formState).then(valid => {
             setButton(!valid);
         })
-    }, [formState])
+    }, [formState]);
 
-    //now we will create the function for submitting a form
-    const formSubmission = event => {
-        event.preventDefault();
-        axios
-            .post('https://reqres.in/api/orders', formState)
-            .then(response => {
-                setPost(response.data);
-                setFormState({
-                    name: '',
-                    size: '',
-                    toppings: '',
-                    instructions: '',
-                })
-            }).catch(err => console.log('there is an error', err.response))
-    };
+
+
+
+
+    useEffect(() => {
+        /* We pass the entire state into the entire schema, no need to use reach here. 
+        We want to make sure it is all valid before we allow a user to submit
+        isValid comes from Yup directly */
+        Schema.isValid(formState).then(valid => {
+            setButton(!valid);
+        });
+    }, [formState]);
+
+
+
+
 
 
     const validated = el => {
@@ -79,6 +86,24 @@ const Form = () => {
     }
 
 
+    //now we will create the function for submitting a form
+    const formSubmit = event => {
+        event.preventDefault();
+        axios
+            .post('https://reqres.in/api/orders', formState)
+            .then(response => {
+                setPost(response.data);
+                setFormState({
+                    name: '',
+                    size: '',
+                    toppings: '',
+                    instructions: '',
+                })
+            }).catch(err => console.log('there is an error', err.response))
+    };
+
+
+
     //input changes
 
     const inputChange = el => {
@@ -94,7 +119,7 @@ const Form = () => {
 
     return (
         //enter form data below
-        <form onSubmit={formSubmission}>
+        <form onSubmit={formSubmit}>
             <h2>Build Your Own Pizza</h2>
 
             <label htmlFor="name">
@@ -125,8 +150,9 @@ const Form = () => {
                 {errors.size.length > 0 ? (<p className="error">{errors.name}</p>) : null}
             </label>
             <br></br>
+            <h3>Add your Toppings!</h3>
             <label htmlFor="toppings">
-                Add Toppings
+                Cheese
             <input
                     id='toppings'
                     type="checkbox"
@@ -134,6 +160,53 @@ const Form = () => {
                     checked={formState.terms}
                     onChange={inputChange}
                 />
+                Sausage
+<input
+
+                    id='toppings'
+                    type="checkbox"
+                    name="toppings"
+                    checked={formState.terms}
+                    onChange={inputChange}
+                />
+                Pepperoni
+                 <input
+
+                    id='toppings'
+                    type="checkbox"
+                    name="toppings"
+                    checked={formState.terms}
+                    onChange={inputChange}
+                />
+                Veggies
+                 <input
+
+                    id='toppings'
+                    type="checkbox"
+                    name="toppings"
+                    checked={formState.terms}
+                    onChange={inputChange}
+                />
+                Jalapenos
+                 <input
+
+                    id='toppings'
+                    type="checkbox"
+                    name="toppings"
+                    checked={formState.terms}
+                    onChange={inputChange}
+                />
+
+                Pineapple
+                 <input
+
+                    id='toppings'
+                    type="checkbox"
+                    name="toppings"
+                    checked={formState.terms}
+                    onChange={inputChange}
+                />
+
                 {errors.toppings.length > 0 ? <p classNme="error">{errors.toppings}</p> : null}
             </label>
             <br></br>
@@ -146,7 +219,7 @@ const Form = () => {
                 {errors.instructions.length > 0 ? <p className='error'>{errors.instructions}</p> : null}
             </label>
             <pre>{JSON.stringify(post, null, 2)}</pre>
-            <button disabled={button}>Submit Order</button>
+            <button disabled={buttonDisabled}>Submit Order</button>
 
 
 
@@ -162,8 +235,8 @@ const Form = () => {
 
 
 
-            }
-    </form>
+
+        </form>
     )
 }
 export default Form;
