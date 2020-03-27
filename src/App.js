@@ -6,13 +6,19 @@ import Form from "./Components/Form.js";
 
 const App = () => {
   return (
-    <>
+    <div>
 
-      <Home>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/pizza' />
-      </Home>
-    </>
+
+
+      <Route exact path='/' component={Home} />
+      <Route exact path='/pizza'>
+
+        <Form />
+      </Route>
+
+
+
+    </div>
   );
 };
 export default App;
