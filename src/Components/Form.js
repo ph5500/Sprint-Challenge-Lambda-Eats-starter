@@ -3,14 +3,13 @@ import axios from 'axios';
 import * as yup from 'yup';
 
 const Schema = yup.object().shape({
-    name: yup.string().required('Must include a name!'),
+    name: yup.string().required('Must include a name!').min(2, 'name must be at least 2 characters'),
     // email: yup.string().email().required('Must include an email'),
     size: yup.string().required('What size pizza would you like??'),
-    toppings: yup.string().required('How many toppings you like?'),
-    // instructions: yup.string().required('Any extra instructions for your order?')
+    toppings: yup.boolean().oneOf([true], 'How many toppings you like?'),
+    instructions: yup.string().required('Any extra instructions for your order?')
 
 });
-
 
 
 
@@ -43,7 +42,7 @@ const Form = () => {
 
 
     //post state below
-    const [post, setPost] = useState()
+    const [post, setPost] = useState([])
     useEffect(() => {
         console.log("when does this run");
         Schema.isValid(formState).then(valid => {
@@ -125,6 +124,7 @@ const Form = () => {
                     onChange={inputChange}>
                 </input>
                 {errors.name.length > 0 ? (<p className="error">{errors.name}</p>) : null}
+
             </label>
 
 
@@ -138,7 +138,7 @@ const Form = () => {
                     <option value=''>Choose</option>
                     <option value='small'>Small</option>
                     <option value='medium'>Medium</option>
-                    <option value='large'>Large</option>
+                    <option value='Large'>Large</option>
                     <option value='extraLarge'>Extra Large</option>
                 </select>
                 {errors.size.length > 0 ? (<p className="error">{errors.name}</p>) : null}
@@ -148,56 +148,56 @@ const Form = () => {
             <label htmlFor="toppings">
                 Cheese
             <input
-                    id='toppings'
+                    id='cheese'
                     type="checkbox"
                     name="toppings"
-                    checked={formState.terms}
+                    checked={formState.cheese}
                     onChange={inputChange}
                 />
                 Sausage
 <input
 
-                    id='toppings'
+                    id='Sausage'
                     type="checkbox"
                     name="toppings"
-                    checked={formState.terms}
+                    checked={formState.Sausage}
                     onChange={inputChange}
                 />
                 Pepperoni
                  <input
 
-                    id='toppings'
+                    id='Pepperoni'
                     type="checkbox"
                     name="toppings"
-                    checked={formState.terms}
+                    checked={formState.Pepperoni}
                     onChange={inputChange}
                 />
                 Veggies
                  <input
 
-                    id='toppings'
+                    id='Veggies'
                     type="checkbox"
                     name="toppings"
-                    checked={formState.terms}
+                    checked={formState.Veggies}
                     onChange={inputChange}
                 />
                 Jalapenos
                  <input
 
-                    id='toppings'
+                    id='Jalapenos'
                     type="checkbox"
                     name="toppings"
-                    checked={formState.terms}
+                    checked={formState.Jalapenos}
                     onChange={inputChange}
                 />
 
                 Pineapple
                  <input
 
-                    id='toppings'
+                    id='Pineapple'
                     type="checkbox"
                     name="toppings"
-                    checked={formState.terms}
+                    checked={formState.Pineapple}
                     onChange={inputChange}
                 />
 

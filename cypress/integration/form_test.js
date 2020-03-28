@@ -1,6 +1,17 @@
+
+
+
+
+
+
+
+
+
+
+
 describe('Test our inputs and submit our form', function () {
     beforeEach(function () {
-        cy.visit('http://localhost:3000/');
+        cy.visit('http://localhost:3000/pizza');
     });
     it('add text to inputs and submit form', function () {
         cy.get('input[name="name"]')
@@ -9,12 +20,12 @@ describe('Test our inputs and submit our form', function () {
         cy.get("#size")
             .select("Large")
             .should("have.value", "Large");
-        cy.get("[type='checkbox']")
+        cy.get('input[name="toppings"]')
             .check()
             .should('be.checked');
         cy.get("textarea")
             .type("I want extra hot peppers and ranch please!")
-        cy.get("button").click();
+        cy.get("button").click().should('be.clicked');
 
     });
 });
