@@ -4,10 +4,10 @@ import * as yup from 'yup';
 
 const Schema = yup.object().shape({
     name: yup.string().required('Must include a name!'),
-    email: yup.string().email().required('Must include an email'),
+    // email: yup.string().email().required('Must include an email'),
     size: yup.string().required('What size pizza would you like??'),
     toppings: yup.string().required('How many toppings you like?'),
-    instructions: yup.string().required('Any extra instructions for your order?')
+    // instructions: yup.string().required('Any extra instructions for your order?')
 
 });
 
@@ -45,46 +45,12 @@ const Form = () => {
     //post state below
     const [post, setPost] = useState()
     useEffect(() => {
+        console.log("when does this run");
         Schema.isValid(formState).then(valid => {
+            console.log("running schema is valid: ", valid);
             setButton(!valid);
         })
     }, [formState]);
-
-
-
-
-
-    useEffect(() => {
-        /* We pass the entire state into the entire schema, no need to use reach here. 
-        We want to make sure it is all valid before we allow a user to submit
-        isValid comes from Yup directly */
-        Schema.isValid(formState).then(valid => {
-            setButton(!valid);
-        });
-    }, [formState]);
-
-
-
-
-
-
-    const validated = el => {
-        yup
-            .reach(Schema, el.target.name)
-            .validate(el.target.name === 'toppings' ? el.target.checked : el.target.value)
-            .then(valid => {
-                setErrors({
-                    ...errors, [el.target.name]: ''
-
-                })
-            })
-            .catch(err => {
-                setErrors({
-                    ...errors, [el.target.name]: err.errors[0]
-                })
-            })
-    }
-
 
     //now we will create the function for submitting a form
     const formSubmit = event => {
@@ -104,10 +70,37 @@ const Form = () => {
 
 
 
+
+
+    const validated = el => {
+        console.log("Validated called: ", el.target.name, el.target.value);
+        yup
+            .reach(Schema, el.target.name)
+            .validate(el.target.name === 'toppings' ? el.target.checked : el.target.value)
+            .then(valid => {
+                console.log("Validation succeeded: ", valid);
+                setErrors({
+                    ...errors, [el.target.name]: ''
+
+                })
+            })
+            .catch(err => {
+                console.log("Validation failed: ", err);
+                setErrors({
+                    ...errors, [el.target.name]: err.errors[0]
+                })
+            })
+    }
+
+
+
+
+
     //input changes
 
     const inputChange = el => {
         el.persist();
+        console.log("Input Changed: ", el.target.value);
         const newFormData = {
             ...formState,
             [el.target.name]:
@@ -140,8 +133,9 @@ const Form = () => {
                 <select
                     id='size'
                     name='size'
-                    // value={formState.name}
+                    value={formState.size}
                     onChange={inputChange}>
+                    <option value=''>Choose</option>
                     <option value='small'>Small</option>
                     <option value='medium'>Medium</option>
                     <option value='large'>Large</option>
@@ -206,6 +200,7 @@ const Form = () => {
                     checked={formState.terms}
                     onChange={inputChange}
                 />
+
 
                 {errors.toppings.length > 0 ? <p classNme="error">{errors.toppings}</p> : null}
             </label>
